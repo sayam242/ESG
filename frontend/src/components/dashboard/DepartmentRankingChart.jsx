@@ -5,157 +5,65 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
-  Cell,
+  CartesianGrid,
 } from "recharts";
 
 const data = [
-  {
-    department: "Operations",
-    score: 91,
-  },
-  {
-    department: "Finance",
-    score: 87,
-  },
-  {
-    department: "HR",
-    score: 84,
-  },
-  {
-    department: "IT",
-    score: 79,
-  },
-  {
-    department: "Manufacturing",
-    score: 73,
-  },
+  { department: "Sales", score: 72 },
+  { department: "Mfg", score: 85 },
+  { department: "Logi", score: 68 },
+  { department: "Corp", score: 92 },
+  { department: "R&D", score: 78 },
 ];
 
-const colors = [
-  "#16a34a",
-  "#22c55e",
-  "#4ade80",
-  "#86efac",
-  "#bbf7d0",
-];
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-lg">
+      <p className="text-sm font-semibold text-slate-800">{label}</p>
+      <p className="text-sm text-blue-600">{payload[0].value} / 100</p>
+    </div>
+  );
+}
 
 export default function DepartmentRankingChart() {
   return (
-    <div className="rounded-3xl bg-white border border-slate-200 shadow-sm p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 className="mb-6 text-lg font-semibold text-slate-900">
+        Department ESG Ranking
+      </h2>
 
-      {/* Header */}
-
-      <div className="flex justify-between items-center mb-6">
-
-        <div>
-
-          <h2 className="text-xl font-semibold text-slate-900">
-            Department ESG Ranking
-          </h2>
-
-          <p className="text-sm text-slate-500 mt-1">
-            Top performing departments
-          </p>
-
-        </div>
-
-      </div>
-
-      {/* Chart */}
-
-      <div className="h-80">
-
-        <ResponsiveContainer
-          width="100%"
-          height="100%"
-        >
-
+      <div className="h-[320px]">
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            layout="vertical"
-            margin={{
-              top: 10,
-              right: 20,
-              left: 10,
-              bottom: 10,
-            }}
+            margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
           >
-
+            <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" vertical={false} />
             <XAxis
-              type="number"
-              domain={[0, 100]}
-              tick={{ fontSize: 12 }}
-            />
-
-            <YAxis
               dataKey="department"
-              type="category"
-              tick={{ fontSize: 13 }}
-              width={110}
+              tick={{ fontSize: 12, fill: "#64748b" }}
+              axisLine={false}
+              tickLine={false}
             />
-
-            <Tooltip />
-
+            <YAxis
+              domain={[0, 100]}
+              ticks={[0, 25, 50, 75, 100]}
+              tick={{ fontSize: 12, fill: "#64748b" }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip content={<CustomTooltip />} />
             <Bar
               dataKey="score"
-              radius={[8, 8, 8, 8]}
-            >
-
-              {data.map((entry, index) => (
-
-                <Cell
-                  key={index}
-                  fill={colors[index]}
-                />
-
-              ))}
-
-            </Bar>
-
+              fill="#3B82F6"
+              radius={[6, 6, 0, 0]}
+              barSize={48}
+            />
           </BarChart>
-
         </ResponsiveContainer>
-
       </div>
-
-      {/* Bottom */}
-
-      <div className="mt-6 space-y-4">
-
-        {data.map((item, index) => (
-
-          <div
-            key={item.department}
-            className="flex justify-between items-center"
-          >
-
-            <div className="flex items-center gap-3">
-
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{
-                  background: colors[index],
-                }}
-              />
-
-              <span className="text-sm text-slate-700">
-                {item.department}
-              </span>
-
-            </div>
-
-            <span className="font-semibold text-slate-800">
-
-              {item.score}
-
-            </span>
-
-          </div>
-
-        ))}
-
-      </div>
-
     </div>
   );
 }

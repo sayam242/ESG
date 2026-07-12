@@ -3,39 +3,16 @@ import TopNavbar from "./TopNavbar";
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="h-screen bg-slate-50 flex overflow-hidden">
-
-      {/* Sidebar */}
-
+    <div className="flex h-screen overflow-hidden bg-[#F4F7FA]">
       <Sidebar />
 
-      {/* Right Side */}
-
-      <div className="flex flex-col flex-1 overflow-hidden">
-
-        {/* Navbar */}
-
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <TopNavbar />
 
-        {/* Main Content */}
-
-        <main
-          className="
-            flex-1
-            overflow-y-auto
-            bg-[#F8FAFC]
-            p-8
-          "
-        >
-          <div className="mx-auto max-w-[1700px]">
-
-            {children}
-
-          </div>
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
+          <div className="mx-auto max-w-[1600px]">{children}</div>
         </main>
-
       </div>
-
     </div>
   );
 }
