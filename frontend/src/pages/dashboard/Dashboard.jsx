@@ -1,11 +1,11 @@
 import DashboardLayout from "../../components/layout/DashboardLayout";
 
 // These components will be created next
-import ScoreCards from "../components/dashboard/ScoreCards";
-import EmissionTrendChart from "../components/dashboard/EmissionTrendChart";
-import DepartmentRankingChart from "../components/dashboard/DepartmentRankingChart";
-import RecentActivity from "../components/dashboard/RecentActivity";
-import QuickActions from "../components/dashboard/QuickActions";
+import ScoreCards from "../../components/dashboard/ScoreCards";
+import EmissionTrendChart from "../../components/dashboard/EmissionTrendChart";
+import DepartmentRankingChart from "../../components/dashboard/DepartmentRankingChart";
+import RecentActivity from "../../components/dashboard/RecentActivity";
+import QuickActions from "../../components/dashboard/QuickActions";
 
 export default function Dashboard() {
   return (

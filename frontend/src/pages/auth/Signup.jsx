@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   User,
   Mail,
@@ -7,14 +7,16 @@ import {
   Building2,
 } from "lucide-react";
 
-import AuthLayout from "../components/auth/AuthLayout";
-import Input from "../components/auth/Input";
-import PasswordInput from "../components/auth/PasswordInput";
-import Button from "../components/auth/Button";
+import { register } from "../../services/authService";
 
-// import { signup } from "../services/authService";
+import AuthLayout from "../../components/auth/AuthLayout";
+import Input from "../../components/auth/Input";
+import PasswordInput from "../../components/auth/PasswordInput";
+import Button from "../../components/auth/Button";
 
 export default function Signup() {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -38,21 +40,46 @@ export default function Signup() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      alert("Passwords do not match.");
       return;
     }
 
     try {
       setLoading(true);
 
-      console.log(formData);
+      // Payload according to Employee model
+      const payload = {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        employeeNo: formData.employeeNo.trim(),
+        departmentId: formData.departmentId,
+      };
 
-      // await signup(formData);
+      console.log("Signup Payload:", payload);
 
-      // navigate("/login");
+      const response = await register(payload);
+
+      console.log("Register Response:", response.data);
+
+      alert("Account created successfully!");
+
+      navigate("/login");
 
     } catch (err) {
-      console.log(err);
+      console.error("Signup Error:", err);
+
+      if (err.response) {
+        console.log("Backend Response:", err.response.data);
+
+        alert(
+          err.response.data.message ||
+            "Registration failed."
+        );
+      } else {
+        alert(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -67,7 +94,7 @@ export default function Signup() {
         onSubmit={handleSignup}
         className="space-y-5"
       >
-        {/* Employee ID */}
+        {/* Employee Number */}
 
         <Input
           label="Employee Number"
@@ -79,9 +106,10 @@ export default function Signup() {
           required
         />
 
-        {/* First & Last Name */}
+        {/* Name */}
 
         <div className="grid grid-cols-2 gap-4">
+
           <Input
             label="First Name"
             name="firstName"
@@ -101,6 +129,7 @@ export default function Signup() {
             onChange={handleChange}
             required
           />
+
         </div>
 
         {/* Email */}
@@ -118,53 +147,18 @@ export default function Signup() {
 
         {/* Department */}
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Department ID
-          </label>
+        {/* Department */}
 
-          <div className="relative">
-            <Building2
-              size={18}
-              className="absolute left-4 top-4 text-gray-400"
-            />
-
-            <select
-              name="departmentId"
-              value={formData.departmentId}
-              onChange={handleChange}
-              className="w-full h-14 rounded-xl border border-gray-300 pl-12 pr-4 focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none"
-              required
-            >
-              <option value="">
-                Select Department
-              </option>
-
-              {/* Replace with API Data */}
-
-              <option value="1">
-                Human Resources
-              </option>
-
-              <option value="2">
-                Information Technology
-              </option>
-
-              <option value="3">
-                Finance
-              </option>
-
-              <option value="4">
-                Operations
-              </option>
-
-              <option value="5">
-                Sustainability
-              </option>
-
-            </select>
-          </div>
-        </div>
+        <Input
+          label="Department"
+          name="departmentId"
+          type="text"
+          placeholder="Enter Department ID or Name"
+          icon={<Building2 size={18} />}
+          value={formData.departmentId}
+          onChange={handleChange}
+          required
+        />
 
         {/* Password */}
 
@@ -191,25 +185,27 @@ export default function Signup() {
         {/* Terms */}
 
         <div className="flex items-start gap-3">
+
           <input
             type="checkbox"
             required
             className="mt-1 h-4 w-4 accent-green-600"
           />
 
-          <p className="text-sm text-gray-600 leading-6">
+          <p className="text-sm text-slate-600 leading-6">
             I agree to the{" "}
-            <span className="text-green-600 font-medium cursor-pointer">
+            <span className="font-medium text-green-600 cursor-pointer">
               Terms of Service
             </span>{" "}
             and{" "}
-            <span className="text-green-600 font-medium cursor-pointer">
+            <span className="font-medium text-green-600 cursor-pointer">
               Privacy Policy
             </span>.
           </p>
+
         </div>
 
-        {/* Signup Button */}
+        {/* Submit */}
 
         <Button
           type="submit"
@@ -218,43 +214,24 @@ export default function Signup() {
           Create Account
         </Button>
 
-        {/* Divider */}
+        {/* Bottom */}
 
-        <div className="relative py-2">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
+        <div className="pt-6 text-center">
 
-          <div className="relative flex justify-center">
-            <span className="bg-white px-4 text-sm text-gray-500">
-              Already registered?
-            </span>
-          </div>
+          <span className="text-slate-500">
+            Already have an account?
+          </span>
+
+          <Link
+            to="/login"
+            className="ml-2 font-semibold text-green-600 hover:text-green-700"
+          >
+            Login
+          </Link>
+
         </div>
 
-        {/* Login */}
-
-        <Link to="/login">
-          <Button variant="secondary">
-            Login
-          </Button>
-        </Link>
       </form>
-
-      {/* Footer */}
-
-      <div className="mt-8 rounded-xl bg-blue-50 border border-blue-100 p-4">
-        <h4 className="font-semibold text-blue-800">
-          One Platform. Complete ESG Management.
-        </h4>
-
-        <p className="mt-2 text-sm text-blue-700 leading-6">
-          Measure carbon emissions, organize CSR initiatives,
-          manage governance policies, monitor compliance,
-          and motivate employees through sustainability
-          challenges and rewards.
-        </p>
-      </div>
     </AuthLayout>
   );
 }

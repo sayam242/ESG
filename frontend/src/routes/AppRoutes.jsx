@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-// import ForgotPassword from "../pages/ForgotPassword";
-// import Dashboard from "../pages/Dashboard";
+import Login from "../pages/auth/Login";
+import Signup from "../pages/auth/Signup";
+import Dashboard from "../pages/dashboard/Dashboard";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (
@@ -40,12 +40,15 @@ export default function AppRoutes() {
 
         {/* Dashboard */}
 
-        {/*
         <Route
-          path="/dashboard"
-          element={<Dashboard />}
+        path="/dashboard"
+        element={
+        <ProtectedRoute>
+        <Dashboard/>
+        </ProtectedRoute>
+        }
         />
-        */}
+
 
         {/* 404 */}
 

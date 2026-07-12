@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, ArrowRight } from "lucide-react";
 
-import AuthLayout from "../components/auth/AuthLayout";
-import Input from "../components/auth/Input";
-import PasswordInput from "../components/auth/PasswordInput";
-import Button from "../components/auth/Button";
+import { login } from "../../services/authService";
 
-// import { login } from "../services/authService";
+import AuthLayout from "../../components/auth/AuthLayout";
+import Input from "../../components/auth/Input";
+import PasswordInput from "../../components/auth/PasswordInput";
+import Button from "../../components/auth/Button";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
 
   const [rememberMe, setRememberMe] = useState(false);
@@ -32,19 +34,54 @@ export default function Login() {
     try {
       setLoading(true);
 
-      console.log({
-        ...formData,
-        rememberMe,
-      });
+      const response = await login(formData);
 
-      // const response = await login(formData);
+      console.log("Login Response:", response.data);
 
-      // localStorage.setItem("token", response.data.token);
+      /*
+        IMPORTANT
 
-      // navigate("/dashboard");
+        If your backend returns
+
+        {
+          token: "...",
+          user: {...}
+        }
+
+        then use response.data.token
+
+        If your backend returns
+
+        {
+          user:{
+            token:"..."
+          }
+        }
+
+        then use response.data.user.token
+      */
+
+      localStorage.setItem(
+        "token",
+        response.data.token
+      );
+
+      if (response.data.user) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.user)
+        );
+      }
+
+      navigate("/dashboard");
 
     } catch (err) {
-      console.log(err);
+      console.error(err);
+
+      alert(
+        err.response?.data?.message ||
+          "Login failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -59,8 +96,6 @@ export default function Login() {
         onSubmit={handleLogin}
         className="space-y-7"
       >
-        {/* Email */}
-
         <Input
           label="Email address"
           name="email"
@@ -72,8 +107,6 @@ export default function Login() {
           required
         />
 
-        {/* Password */}
-
         <PasswordInput
           label="Password"
           name="password"
@@ -82,8 +115,6 @@ export default function Login() {
           onChange={handleChange}
           required
         />
-
-        {/* Remember + Forgot */}
 
         <div className="flex items-center justify-between">
 
@@ -113,8 +144,6 @@ export default function Login() {
 
         </div>
 
-        {/* Login Button */}
-
         <Button
           type="submit"
           loading={loading}
@@ -124,19 +153,13 @@ export default function Login() {
             Sign In
           </span>
 
-          {!loading && (
-            <ArrowRight size={22} />
-          )}
+          {!loading && <ArrowRight size={22} />}
         </Button>
-
-        {/* Bottom */}
 
         <div className="pt-6 text-center">
 
           <span className="text-slate-500">
-
             Don't have an account?
-
           </span>
 
           <Link
