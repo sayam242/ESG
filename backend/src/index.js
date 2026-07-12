@@ -18,6 +18,11 @@ import rewardRoutes from "./gamification/reward/routes/reward.routes.js";
 import departmentRoutes from "./settings/department/routes/department.routes.js";
 import categoryRoutes from "./settings/category/routes/category.routes.js";
 
+import csrActivityRoutes from "./social/csr-activity/routes/csr-activity.routes.js";
+import participationRoutes from "./social/employee-participation/routes/participation.routes.js";
+
+import employeeRoutes from "./employee/routes/employee.routes.js";
+
 const app = express();
 
 app.use(cors());
@@ -36,6 +41,11 @@ app.use("/api/gamification/rewards", rewardRoutes);
 
 app.use("/api/settings/departments", departmentRoutes);
 app.use("/api/settings/categories", categoryRoutes);
+
+app.use("/api/social/csr-activities", csrActivityRoutes);
+app.use("/api/social/participations", participationRoutes);
+
+app.use("/api/employees", employeeRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });

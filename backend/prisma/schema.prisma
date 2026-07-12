@@ -42,6 +42,12 @@ enum GoalStatus {
   OVERDUE
 }
 
+enum ParticipationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 
 model Department {
   id          String   @id @default(cuid())
@@ -161,6 +167,7 @@ model Employee {
   lastName      String?
   email         String   @unique
   password      String
+  xp            Int      @default(0)
 
   departmentId  String
   department    Department @relation(fields: [departmentId], references: [id])
@@ -198,6 +205,7 @@ model CSRActivity {
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
 
+  evidenceRequired Boolean @default(false)
   status      CSRStatus @default(PENDING)
 
   participations EmployeeParticipation[]
@@ -217,10 +225,13 @@ model EmployeeParticipation {
 
   activityDate  DateTime
   proofUrl      String?
+  status        ParticipationStatus @default(PENDING)
   approvalDate  DateTime?
   completionDate DateTime?
 
   createdAt DateTime @default(now())
+
+  @@unique([employeeId, activityId])
 }
 
 model Challenge {
