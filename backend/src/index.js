@@ -1,20 +1,19 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 
 dotenv.config();
+import authRoutes from "./auth/routes/auth.routes.js";
+import departmentRoutes from "./department/routes/department.routes.js";
+
 
 const app = express();
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL,
-});
-const prisma = new PrismaClient({ adapter });
-
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
+app.use("/api/departments", departmentRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });

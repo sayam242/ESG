@@ -141,8 +141,9 @@ model Employee {
   id            String   @id @default(cuid())
   employeeNo    String   @unique
   firstName     String
-  lastName      String
+  lastName      String?
   email         String   @unique
+  password      String
 
   departmentId  String
   department    Department @relation(fields: [departmentId], references: [id])
@@ -151,6 +152,8 @@ model Employee {
   badges         EmployeeBadge[]
   redemptions    RewardRedemption[]
   acknowledgements PolicyAcknowledgement[]
+  carbonTransactions CarbonTransaction[]
+  challengeParticipations ChallengeParticipation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
