@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import authRoutes from "./auth/routes/auth.routes.js";
 import departmentRoutes from "./department/routes/department.routes.js";
-
+import environmentalRoutes from "../src/environmental/routes/environmental.routes.js"
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/departments", departmentRoutes);
+app.use("/api/environment", environmentalRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });

@@ -35,6 +35,13 @@ enum BadgeStatus {
   INACTIVE
 }
 
+enum GoalStatus {
+  ACTIVE
+  ON_TRACK
+  COMPLETED
+  OVERDUE
+}
+
 
 model Department {
   id          String   @id @default(cuid())
@@ -87,14 +94,24 @@ model ProductProfile {
 }
 
 model EnvironmentalGoal {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  targetDate  DateTime?
-  status      Boolean @default(true)
+  id            String   @id @default(cuid())
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  name          String
+  description   String?
+
+  department    String
+
+  targetCO2     Float
+  currentCO2    Float
+
+  progress      Float    @default(0) // percentage (0-100)
+
+  deadline      DateTime
+
+  status        GoalStatus @default(ACTIVE)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model ESGPolicy {
