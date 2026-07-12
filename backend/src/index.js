@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import authRoutes from "./auth/routes/auth.routes.js";
+import adminRoutes from "./admin/routes/admin.routes.js";
 
 import environmentalGoalRoutes from "./environmental/environmental-goal/routes/environmental.routes.js";
 import emissionFactorRoutes from "./environmental/emission-factor/routes/emission-factor.routes.js";
@@ -29,6 +30,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use("/api/environment/goals", environmentalGoalRoutes);
 app.use("/api/environment/emission-factors", emissionFactorRoutes);

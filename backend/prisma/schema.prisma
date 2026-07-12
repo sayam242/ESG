@@ -48,6 +48,11 @@ enum ParticipationStatus {
   REJECTED
 }
 
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
 
 model Department {
   id          String   @id @default(cuid())
@@ -168,9 +173,10 @@ model Employee {
   email         String   @unique
   password      String
   xp            Int      @default(0)
+  role          Role     @default(EMPLOYEE)
 
-  departmentId  String
-  department    Department @relation(fields: [departmentId], references: [id])
+  departmentId  String?
+  department    Department? @relation(fields: [departmentId], references: [id])
 
   participations EmployeeParticipation[]
   badges         EmployeeBadge[]
